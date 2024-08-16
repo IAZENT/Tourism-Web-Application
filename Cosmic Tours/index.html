@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Tours - Explore Nepal</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        .user-info {
+            position: relative;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        #user-welcome {
+            font-size: 20px; 
+            font-weight: bold;
+            color: #219150; 
+            margin: 0;
+        }
+
+
+
+.user-info {
+    display: flex;
+    align-items: center; 
+    gap: 10px; 
+}
+
+
+.btn {
+    padding: 5px 10px;
+    border: 1px solid #000; 
+    border-radius: 3px;
+    background-color: transparent;
+    color: #000; 
+    font-size: 14px;
+    font-weight: normal;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    outline: none;
+}
+
+
+.logout-btn {
+    margin: 0;
+}
+
+.logout-btn:hover {
+    background-color: rgba(0, 0, 0, 0.1); 
+    color: #333; 
+}
+
+.logout-btn:active {
+    background-color: rgba(0, 0, 0, 0.2); 
+    color: #000;
+}
+
+
+.login-btn {
+    display: none;
+}
+
+.login-btn:hover {
+    background-color: rgba(0, 0, 0, 0.1); 
+    color: #333; 
+}
+
+.login-btn:active {
+    background-color: rgba(0, 0, 0, 0.2); 
+    color: #000;
+}
+
+
+
+    </style>
+    
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            fetch('signinup/get_user_info.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        
+                        document.getElementById('user-welcome').textContent = 'Welcome, Guest!';
+                        document.getElementById('logout-button').style.display = 'none';
+                        document.getElementById('login-button').style.display = 'block'; 
+                    } else {
+                    
+                        document.getElementById('user-welcome').textContent = `Welcome, ${data.first_name}!`;
+                        document.getElementById('logout-button').style.display = 'block'; 
+                        document.getElementById('login-button').style.display = 'none'; 
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching user info:', error);
+                    document.getElementById('user-welcome').textContent = 'Welcome, Guest!';
+                    document.getElementById('logout-button').style.display = 'none';
+                    document.getElementById('login-button').style.display = 'block';
+                });
+    
+            
+            const swiper = new Swiper('.product-slider', {
+                slidesPerView: 1,
+                spaceBetween: 10,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 2,
+                        spaceBetween: 20,
+                    },
+                    768: {
+                        slidesPerView: 3,
+                        spaceBetween: 30,
+                    },
+                    1024: {
+                        slidesPerView: 4,
+                        spaceBetween: 40,
+                    },
+                },
+            });
+            
+            
+            document.getElementById('get-started-btn')?.addEventListener('click', function() {
+                window.location.href = 'signinup/login.php';
+            });
+    
+           
+            document.getElementById('logout-button')?.addEventListener('click', function() {
+                fetch('signinup/logout.php', { method: 'POST' })
+                    .then(response => response.text())
+                    .then(() => {
+                        document.getElementById('user-welcome').textContent = 'Welcome, Guest!';
+                        document.getElementById('logout-button').style.display = 'none'; 
+                        document.getElementById('login-button').style.display = 'block'; 
+                    })
+                    .catch(error => console.error('Error logging out:', error));
+            });
+    
+            
+            document.getElementById('login-button')?.addEventListener('click', function() {
+                window.location.href = 'signinup/login.php';
+            });
+        });
+    </script>
+    
+        
+    
+
+
+</head>
+<body>
+    <!-- header section -->
+    <header class="header">
+        <a href="#" class="logo"><i class="fas fa-hiking"></i>Cosmic Tours</a>
+        <nav class="navbar">
+            <div id="nav-close" class="fas fa-times"></div>
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#shop">Shop</a>
+            <a href="#packages">Packages</a>
+            <a href="#reviews">Reviews</a>
+            <a href="#blogs">Blogs</a>
+        </nav>
+
+        
+        <div class="icons">
+            <div id="menu-btn" class="fas fa-bars"></div>
+            <a href="#cart" class="cart-icon">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cart-count">0</span>
+            </a>
+            <div id="search-btn" class="fas fa-search"></div>
+        </div>
+        
+        <!-- User Info Display -->
+<div class="user-info">
+    <p id="user-welcome">Welcome!</p>
+    <button id="logout-button" class="btn logout-btn">Logout</button>
+    <button id="login-button" class="btn login-btn" style="display: none;">Login</button>
+</div>
+
+        
+    </header>
+    <!-- header section ends -->
+
+    
+
+
+    <!-- search form -->
+    <div class="search-form">
+        <div id="close-search" class="fas fa-times"></div>
+        <form action="">
+            <input type="search" name="" placeholder="Search for destinations in Nepal..." id="search-box">
+            <label for="search-box" class="fas fa-search"></label>
+        </form>
+    </div>
+    <!-- search form ends -->
+
+<!-- home section -->
+<section class="home" id="home">
+    <div class="swiper home-slider">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="box" style="background: url(images/home-bg-1.jpg) no-repeat;">
+                    <div class="content">
+                        <span>Discover the</span>
+                        <h3>Majestic Himalayas</h3>
+                        <p>Experience the serenity of Nepal's natural beauty.</p>
+                        <a href="signinup/register.html" class="btn">Explore</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="box second" style="background: url(images/home-bg-2.jpg) no-repeat;">
+                    <div class="content">
+                        <span>Embark on a</span>
+                        <h3>Cultural Journey</h3>
+                        <p>Explore the rich traditions and history of Nepal.</p>
+                        <a href="signinup/register.html" class="btn">Register</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="box" style="background: url(images/home-bg-3.jpg) no-repeat;">
+                    <div class="content">
+                        <span>Adventure Awaits</span>
+                        <h3>In the Heart of Nature</h3>
+                        <p>Trek through stunning landscapes and vibrant wildlife.</p>
+                        <a href="signinup/register.html" class="btn">Register</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</section>
+<!-- home section ends -->
+
+
+    <!-- category section -->
+    <section class="category">
+        <h1 class="heading">Adventure Ideas in Nepal</h1>
+        <div class="box-container">
+            <div class="box">
+                <img src="images/category-1.jpg" alt="">
+                <h3>Trekking in the Annapurna Region</h3>
+                <p>Join us for an unforgettable trek through the Annapurna Circuit and witness breathtaking views.</p>
+                <a href="#" class="btn">Read More</a>
+            </div>
+
+            <div class="box">
+                <img src="images/category-2.jpg" alt="">
+                <h3>Paragliding in Pokhara</h3>
+                <p>Soar through the skies of Pokhara and enjoy stunning aerial views of the Himalayas.</p>
+                <a href="#" class="btn">Read More</a>
+            </div>
+
+            <div class="box">
+                <img src="images/category-3.jpg" alt="">
+                <h3>Cultural Tours in Kathmandu</h3>
+                <p>Explore ancient temples, palaces, and vibrant markets in Nepal's capital.</p>
+                <a href="#" class="btn">Read More</a>
+            </div>
+
+            <div class="box">
+                <img src="images/category-4.jpg" alt="">
+                <h3>Wildlife Safaris in Chitwan</h3>
+                <p>Discover Nepal's rich wildlife in Chitwan National Park on a thrilling safari.</p>
+                <a href="#" class="btn">Read More</a>
+            </div>
+        </div>
+    </section>
+    <!-- category section ends -->
+
+    <!-- about section -->
+    <section class="about" id="about">
+        <div class="image">
+            <img src="images/about-img.jpg" alt="">
+        </div>
+        <div class="content">
+            <h3>Unforgettable Experiences in Nepal</h3>
+            <p>At Cosmic Tours, we are dedicated to showcasing the beauty of Nepal through expertly crafted tours that connect you with the culture, landscapes, and people of this incredible country.</p>
+            <p>Whether you seek adventure, relaxation, or cultural immersion, our tours are designed to cater to your every desire.</p>
+            <a href="#" class="btn">Read More</a>
+        </div>
+    </section>
+    <!-- about section ends -->
+
+<!-- Shop section starts here -->
+<section class="shop" id="shop">
+    <h1 class="heading">Featured Products</h1>
+    <div class="swiper product-slider">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide slide">
+                <div class="image">
+                    <img src="images/product-1.jpg" alt="">
+                    <div class="icons">
+                        <a href="#" class="fas fa-shopping-cart add-to-cart" data-product-id="1"></a>
+                        <a href="#" class="fas fa-eye"></a>
+                        <a href="#" class="fas fa-share"></a>
+                    </div>
+                </div>
+                <div class="content">
+                    <h3>Survival Kits</h3>
+                    <div class="price">Rs 5000</div>
+                    <div class="starts">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-slide slide">
+                <div class="image">
+                    <img src="images/product-2.jpg" alt="">
+                    <div class="icons">
+                        <a href="#" class="fas fa-shopping-cart add-to-cart" data-product-id="2"></a>
+                        <a href="#" class="fas fa-eye"></a>
+                        <a href="#" class="fas fa-share"></a>
+                    </div>
+                </div>
+                <div class="content">
+                    <h3>Survival Jacket</h3>
+                    <div class="price">Rs 10000</div>
+                    <div class="starts">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-slide slide">
+                <div class="image">
+                    <img src="images/product-3.JPG" alt="">
+                    <div class="icons">
+                        <a href="#" class="fas fa-shopping-cart add-to-cart" data-product-id="3"></a>
+                        <a href="#" class="fas fa-eye"></a>
+                        <a href="#" class="fas fa-share"></a>
+                    </div>
+                </div>
+                <div class="content">
+                    <h3>Glass</h3>
+                    <div class="price">Rs 5000</div>
+                    <div class="starts">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-slide slide">
+                <div class="image">
+                    <img src="images/product-4.JPG" alt="">
+                    <div class="icons">
+                        <a href="#" class="fas fa-shopping-cart add-to-cart" data-product-id="4"></a>
+                        <a href="#" class="fas fa-eye"></a>
+                        <a href="#" class="fas fa-share"></a>
+                    </div>
+                </div>
+                <div class="content">
+                    <h3>Tracking Shoes</h3>
+                    <div class="price">Rs 5000</div>
+                    <div class="starts">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-slide slide">
+                <div class="image">
+                    <img src="images/product-5.jpg" alt="">
+                    <div class="icons">
+                        <a href="#" class="fas fa-shopping-cart add-to-cart" data-product-id="5"></a>
+                        <a href="#" class="fas fa-eye"></a>
+                        <a href="#" class="fas fa-share"></a>
+                    </div>
+                </div>
+                <div class="content">
+                    <h3>Carabiner</h3>
+                    <div class="price">Rs 1000</div>
+                    <div class="starts">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-slide slide">
+                <div class="image">
+                    <img src="images/product-6.jpg" alt="">
+                    <div class="icons">
+                        <a href="#" class="fas fa-shopping-cart add-to-cart" data-product-id="6"></a>
+                        <a href="#" class="fas fa-eye"></a>
+                        <a href="#" class="fas fa-share"></a>
+                    </div>
+                </div>
+                <div class="content">
+                    <h3>Charcoal Grill</h3>
+                    <div class="price">Rs 2000</div>
+                    <div class="starts">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</section>
+<!-- Shop section ends -->
+
+
+<!-- Package section starts here -->
+<section class="packages" id="packages">
+    <h1 class="heading">Popular Packages</h1>
+    <div class="box-container">
+        <!-- Package 1 -->
+        <div class="box">
+            <div class="image">
+                <img src="images/img-1.jpg" alt="Everest Base Camp">
+            </div>
+            <div class="content">
+                <h3>Everest Base Camp Trek</h3>
+                <p>Embark on an adventurous trek to Everest Base Camp, where you'll witness stunning mountain vistas and experience the unique culture of the Sherpa people.</p>
+                <div class="price">Rs 265,000</div>
+                <a href="#" class="btn book-now" data-package-id="1">Book Now</a>
+            </div>
+        </div>
+
+        <!-- Package 2 -->
+        <div class="box">
+            <div class="image">
+                <img src="images/img-2.jpg" alt="Kathmandu Valley Tour">
+            </div>
+            <div class="content">
+                <h3>Kathmandu Valley Tour</h3>
+                <p>Explore the vibrant culture and historic sites of Kathmandu Valley. Visit ancient temples, palaces, and the bustling markets of Kathmandu, Bhaktapur, and Patan.</p>
+                <div class="price">Rs 50,000</div>
+                <a href="#" class="btn book-now" data-package-id="2">Book Now</a>
+            </div>
+        </div>
+
+        <!-- Package 3 -->
+        <div class="box">
+            <div class="image">
+                <img src="images/img-3.jpg" alt="Chitwan Jungle Safari">
+            </div>
+            <div class="content">
+                <h3>Chitwan Jungle Safari</h3>
+                <p>Experience the thrill of a jungle safari in Chitwan National Park. Discover diverse wildlife including Bengal tigers and one-horned rhinoceroses in their natural habitat.</p>
+                <div class="price">Rs 85,000</div>
+                <a href="#" class="btn book-now" data-package-id="3">Book Now</a>
+            </div>
+        </div>
+
+        <!-- Package 4 -->
+        <div class="box">
+            <div class="image">
+                <img src="images/img-4.jpg" alt="Annapurna Circuit Trek">
+            </div>
+            <div class="content">
+                <h3>Annapurna Circuit Trek</h3>
+                <p>Traverse the renowned Annapurna Circuit, offering diverse landscapes from lush subtropical forests to high-altitude deserts, with awe-inspiring views of Annapurna and Dhaulagiri.</p>
+                <div class="price">Rs 156,000</div>
+                <a href="#" class="btn book-now" data-package-id="4">Book Now</a>
+            </div>
+        </div>
+
+        <!-- Package 5 -->
+        <div class="box">
+            <div class="image">
+                <img src="images/img-5.jpg" alt="Lumbini Pilgrimage">
+            </div>
+            <div class="content">
+                <h3>Lumbini Pilgrimage Tour</h3>
+                <p>Visit Lumbini, the birthplace of Lord Buddha. Explore sacred gardens, ancient ruins, and various monasteries that reflect the Buddhist heritage of this significant site.</p>
+                <div class="price">Rs 78,000</div>
+                <a href="#" class="btn book-now" data-package-id="5">Book Now</a>
+            </div>
+        </div>
+
+        <!-- Package 6 -->
+        <div class="box">
+            <div class="image">
+                <img src="images/img-6.jpg" alt="Pokhara Adventure">
+            </div>
+            <div class="content">
+                <h3>Pokhara Adventure Package</h3>
+                <p>Discover the adventure capital of Nepal with activities such as paragliding, boating on Phewa Lake, and exploring the scenic beauty of the surrounding hills and waterfalls.</p>
+                <div class="price">Rs 65,000</div>
+                <a href="#" class="btn book-now" data-package-id="6">Book Now</a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Package section ends -->
+<script src="cart.js"></script>
+<!-- Cart section starts here -->
+<section class="cart" id="cart">
+    <h1 class="heading">Your Cart</h1>
+    <div class="cart-items" id="cart-items">
+        <!-- Cart items will be dynamically added here -->
+    </div>
+    <div class="cart-summary">
+        <div style="text-align: center;">
+            <a href="checkout.php" class="btn checkout" style="display: inline-block; margin: 0 10px;">Proceed to Checkout</a>
+            <button id="clear-cart" class="btn clear-cart" style="display: inline-block; margin: 0 10px;">Clear Cart</button>
+        </div>
+        
+    </div>
+</section>
+
+<!-- Cart section ends -->
+
+
+    <!-- reviews section  -->
+    <section class="reviews" id="reviews">
+        <h1 class="heading">Client Reviews</h1>
+        <div class="swiper review-slider">
+            <div class="swiper-wrapper">
+                <!-- Review 1 -->
+                <div class="swiper-slide slide">
+                    <p class="text">"The Everest Base Camp trek was an unforgettable experience! The guides were knowledgeable and the scenery was breathtaking. Highly recommend for adventure seekers!"</p>
+                    <div class="user">
+                        <img src="images/Untitled-1.png" alt="Emily Carter">
+                        <div class="info">
+                            <h3>Subidha Pandey</h3>
+                            <span>Hacker</span>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Review 2 -->
+                <div class="swiper-slide slide">
+                    <p class="text">"Kathmandu Valley Tour exceeded all my expectations. The cultural richness and historical sites were truly remarkable. A must-do for anyone visiting Nepal!"</p>
+                    <div class="user">
+                        <img src="images/pic-2.png" alt="Michael Smith">
+                        <div class="info">
+                            <h3>Michael Smith</h3>
+                            <span>Photographer</span>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Review 3 -->
+                <div class="swiper-slide slide">
+                    <p class="text">"Chitwan Jungle Safari was an incredible adventure. Seeing wildlife in their natural habitat was amazing. The safari guides were fantastic and made the trip very memorable."</p>
+                    <div class="user">
+                        <img src="images/pic-3.png" alt="Sophia Lee">
+                        <div class="info">
+                            <h3>Sophia Lee</h3>
+                            <span>Wildlife Enthusiast</span>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Review 4 -->
+                <div class="swiper-slide slide">
+                    <p class="text">"The Annapurna Circuit Trek was a dream come true. The diverse landscapes and stunning views made every step worthwhile. Well-organized and worth every penny!"</p>
+                    <div class="user">
+                        <img src="images/pic-4.png" alt="James Brown">
+                        <div class="info">
+                            <h3>James Brown</h3>
+                            <span>Outdoor Adventurer</span>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Review 5 -->
+                <div class="swiper-slide slide">
+                    <p class="text">"Lumbini Pilgrimage was a spiritually enriching experience. The serene environment and historical significance of the site were deeply moving. A perfect pilgrimage destination."</p>
+                    <div class="user">
+                        <img src="images/pic-5.png" alt="Linda Patel">
+                        <div class="info">
+                            <h3>Linda Patel</h3>
+                            <span>Spiritual Guide</span>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Review 6 -->
+                <div class="swiper-slide slide">
+                    <p class="text">"Pokhara Adventure Package was exhilarating! From paragliding to boating, every activity was thrilling and well-organized. Pokhara is indeed an adventure paradise."</p>
+                    <div class="user">
+                        <img src="images/pic-6.png" alt="David Wilson">
+                        <div class="info">
+                            <h3>David Wilson</h3>
+                            <span>Adventure Enthusiast</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>   
+    </section>
+    
+    <!-- review section ends -->
+
+    <!-- services section -->
+
+    <section class="services">
+        <h1 class="heading">What We Offer</h1>
+        <div class="box-container">
+            <!-- Service 1 -->
+            <div class="box">
+                <img src="images/serv-1.png" alt="Comprehensive Travel Guide">
+                <h3>Comprehensive Travel Guide</h3>
+                <p>Our detailed travel guides provide everything you need to know for an unforgettable experience in Nepal. From local tips to cultural insights, we’ve got you covered.</p>
+                <a href="#" class="btn">Read More</a>
+            </div>
+    
+            <!-- Service 2 -->
+            <div class="box">
+                <img src="images/serv-2.png" alt="Custom Travel Packages">
+                <h3>Custom Travel Packages</h3>
+                <p>Create your dream adventure with our tailored travel packages. Whether you seek relaxation or thrill, we design personalized itineraries to suit your preferences.</p>
+                <a href="#" class="btn">Read More</a>
+            </div>
+    
+            <!-- Service 3 -->
+            <div class="box">
+                <img src="images/serv-3.png" alt="Family-Friendly Trips">
+                <h3>Family-Friendly Trips</h3>
+                <p>Enjoy quality family time with our specially crafted family trips. We offer activities and accommodations that cater to all ages, ensuring fun and comfort for everyone.</p>
+                <a href="#" class="btn">Read More</a>
+            </div>
+    
+            <!-- Service 4 -->
+            <div class="box">
+                <img src="images/serv-4.png" alt="Guided Train Journeys">
+                <h3>Guided Train Journeys</h3>
+                <p>Experience Nepal’s scenic beauty from the comfort of a train. Our guided train journeys offer historical insights and picturesque views, enhancing your travel experience.</p>
+                <a href="#" class="btn">Read More</a>
+            </div>
+    
+            <!-- Service 5 -->
+            <div class="box">
+                <img src="images/serv-5.png" alt="Adventure Trails">
+                <h3>Adventure Trails</h3>
+                <p>Embark on thrilling adventures with our expertly guided trails. From challenging treks to exhilarating sports, explore Nepal’s diverse landscapes and adrenaline-pumping activities.</p>
+                <a href="#" class="btn">Read More</a>
+            </div>
+    
+            <!-- Service 6 -->
+            <div class="box">
+                <img src="images/serv-6.png" alt="Various Adventures">
+                <h3>Various Adventures</h3>
+                <p>Discover a range of exciting activities suited to all interests. Whether you’re into hiking, rafting, or exploring, we offer a wide selection of adventures for every type of traveler.</p>
+                <a href="#" class="btn">Read More</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- services section ends -->
+
+    <!-- blog section  -->
+
+    <section class="blogs" id="blogs">
+        <h1 class="heading">Our Daily Posts</h1>
+        <div class="swiper blogs-slider">
+            <div class="swiper-wrapper">
+    
+                <!-- Blog Post 1 -->
+                <div class="swiper-slide slide">
+                    <img src="images/img-1.jpg" alt="Exploring Nepal's Hidden Gems">
+                    <div class="icons">
+                        <a href="#"><i class="fas fa-calendar"></i> 1st August 2024</a>
+                        <a href="#"><i class="fas fa-user"></i> by Jane Doe</a>
+                    </div>
+                    <h3>Exploring Nepal's Hidden Gems</h3>
+                    <p>Discover the lesser-known treasures of Nepal with our latest blog post. From secluded mountain trails to undiscovered local markets, join us as we unveil the hidden gems waiting to be explored.</p>
+                    <a href="#" class="btn">Read More</a>
+                </div>
+    
+                <!-- Blog Post 2 -->
+                <div class="swiper-slide slide">
+                    <img src="images/img-2.jpg" alt="The Ultimate Guide to Trekking in Nepal">
+                    <div class="icons">
+                        <a href="#"><i class="fas fa-calendar"></i> 28th July 2024</a>
+                        <a href="#"><i class="fas fa-user"></i> by John Smith</a>
+                    </div>
+                    <h3>The Ultimate Guide to Trekking in Nepal</h3>
+                    <p>Planning a trek in Nepal? Our comprehensive guide covers everything from essential gear to top trekking routes. Get ready for an adventure of a lifetime with our expert tips and recommendations.</p>
+                    <a href="#" class="btn">Read More</a>
+                </div>
+    
+                <!-- Blog Post 3 -->
+                <div class="swiper-slide slide">
+                    <img src="images/img-3.jpg" alt="Nepalese Cuisine: A Culinary Journey">
+                    <div class="icons">
+                        <a href="#"><i class="fas fa-calendar"></i> 15th July 2024</a>
+                        <a href="#"><i class="fas fa-user"></i> by Emily Clarke</a>
+                    </div>
+                    <h3>Nepalese Cuisine: A Culinary Journey</h3>
+                    <p>Embark on a culinary journey through Nepalese cuisine. From spicy curries to sweet delicacies, explore the flavors that define Nepal’s rich food culture and discover must-try dishes.</p>
+                    <a href="#" class="btn">Read More</a>
+                </div>
+    
+                <!-- Blog Post 4 -->
+                <div class="swiper-slide slide">
+                    <img src="images/img-4.jpg" alt="Cultural Festivals in Nepal You Can't Miss">
+                    <div class="icons">
+                        <a href="#"><i class="fas fa-calendar"></i> 8th July 2024</a>
+                        <a href="#"><i class="fas fa-user"></i> by Michael Brown</a>
+                    </div>
+                    <h3>Cultural Festivals in Nepal You Can't Miss</h3>
+                    <p>Experience the vibrant cultural festivals of Nepal. Our blog post highlights the most exciting festivals throughout the year, offering insights into traditional celebrations and unique cultural experiences.</p>
+                    <a href="#" class="btn">Read More</a>
+                </div>
+    
+                <!-- Blog Post 5 -->
+                <div class="swiper-slide slide">
+                    <img src="images/img-5.jpg" alt="Top 5 Adventure Activities in Nepal">
+                    <div class="icons">
+                        <a href="#"><i class="fas fa-calendar"></i> 30th June 2024</a>
+                        <a href="#"><i class="fas fa-user"></i> by Sarah Wilson</a>
+                    </div>
+                    <h3>Top 5 Adventure Activities in Nepal</h3>
+                    <p>Looking for thrills? Check out our top 5 adventure activities in Nepal. From bungee jumping to white-water rafting, find out where to get your adrenaline fix in the Himalayas.</p>
+                    <a href="#" class="btn">Read More</a>
+                </div>
+    
+                <!-- Blog Post 6 -->
+                <div class="swiper-slide slide">
+                    <img src="images/img-6.jpg" alt="A Guide to Eco-Friendly Travel in Nepal">
+                    <div class="icons">
+                        <a href="#"><i class="fas fa-calendar"></i> 20th June 2024</a>
+                        <a href="#"><i class="fas fa-user"></i> by Lisa Green</a>
+                    </div>
+                    <h3>A Guide to Eco-Friendly Travel in Nepal</h3>
+                    <p>Travel responsibly with our guide to eco-friendly practices in Nepal. Learn how to minimize your environmental impact and support sustainable tourism while exploring this beautiful country.</p>
+                    <a href="#" class="btn">Read More</a>
+                </div>
+    
+            </div>
+        </div>
+    </section>
+    
+    <!-- blog section ends -->
+
+    <section class="newsletter">
+
+        <div class="content">
+            <h1 class="heading">Subscribe Now</h1>
+            <p>Stay updated with the latest news, exclusive offers, and travel tips straight to your inbox. Sign up for our newsletter and never miss an update!</p>
+            <form action="#" method="post">
+                <input type="email" name="email" placeholder="Enter your email address" id="email" class="email" required>
+                <input type="submit" value="Subscribe" class="btn">
+            </form>
+        </div>
+    
+    </section>
+    
+    <section class="clients">
+
+        <div class="swiper clients-slider">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide silde"><img src="images/client-logo-1.png" alt=""></div>
+                <div class="swiper-slide silde"><img src="images/client-logo-2.png" alt=""></div>
+                <div class="swiper-slide silde"><img src="images/client-logo-3.png" alt=""></div>
+                <div class="swiper-slide silde"><img src="images/client-logo-4.png" alt=""></div>
+            </div>
+        </div>
+    
+    </section>
+
+    <!-- footer section starts  -->
+
+<section class="footer">
+
+    <div class="box-container">
+
+        <div class="box">
+            <h3>quick links</h3>
+            <a href="#home">home</a>
+            <a href="#about">about</a>
+            <a href="#shop">shop</a>
+            <a href="#packages">packages</a>
+            <a href="#reviews">reviews</a>
+            <a href="#blogs">blogs</a>
+        </div>
+
+        <div class="box">
+            <h3>extra links</h3>
+            <a href="#">my account</a>
+            <a href="#">my order</a>
+            <a href="#">my wishlist</a>
+            <a href="#">ask questions</a>
+            <a href="#">terms of use</a>
+            <a href="#">privacy policy</a>
+        </div>
+
+        <div class="box">
+            <h3>contact info</h3>
+            <a href=""> <i class="fas fa-phone"></i> +977-9807584656 </a>
+            <a href="#"> <i class="fas fa-phone"></i> +977-9754965478 </a>
+            <a href="#"> <i class="fas fa-envelope"></i> rupeshthakur@gmail.com </a>
+            <a href="#"> <i class="fas fa-map"></i>Kathmandu, Nepal </a>
+        </div>
+
+        <div class="box">
+            <h3>follow us</h3>
+            <a href="#"> <i class="fab fa-facebook-f"></i> facebook </a>
+            <a href="#"> <i class="fab fa-twitter"></i> twitter </a>
+            <a href="#"> <i class="fab fa-instagram"></i> instagram </a>
+            <a href="#"> <i class="fab fa-linkedin"></i> linkedin </a>
+            <a href="#"> <i class="fab fa-github"></i> github </a>
+        </div>
+
+    </div>
+
+    <div class="credit">created by <span>Mr.Rupesh Thakur</span> | all rights reserved!</div>
+
+</section>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+    <!-- custom js -->
+    <script src="script.js"></script>
+</body>
+</html>
