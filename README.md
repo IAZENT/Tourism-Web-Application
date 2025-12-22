@@ -1,5 +1,3 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/S-nnoKbe)
-
 Cosmic Tours
 Welcome to Cosmic Tours, your one-stop destination for exploring and booking tourism packages and purchasing hiking or tour-related products. This website is designed to provide users with a seamless experience while planning their next adventure.
 ![image](https://github.com/user-attachments/assets/afbf6414-b4d9-49d8-bd84-e9bcd6624d85)
